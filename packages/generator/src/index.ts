@@ -3,6 +3,10 @@ require("dotenv-expand")(require("dotenv").config());
 (async () => {
   setInterval(async () => {
     const W1open = await GeneratorService.checkifW1IsOpen();
-    W1open && console.log(await GeneratorService.addPlaneToW1());
+    console.log(W1open);
+
+    W1open &&
+      Math.random() > 0.5 &&
+      console.log(await GeneratorService.addPlaneToW1());
   }, 1000);
 })();

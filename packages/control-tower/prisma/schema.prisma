@@ -14,8 +14,22 @@ model Waypoint {
   id       String    @id @default(uuid())
   name     String    @unique
   Airpalne Airplane?
+  ILS      ILS?      @relation(fields: [iLSId], references: [id])
+  iLSId    String?
+  SID      SID?      @relation(fields: [sIDId], references: [id])
+  sIDId    String?
+}
 
+model ILS {
+  id                 String     @id @default(uuid())
+  code               String     @unique
+  waypoints_by_order Waypoint[]
+}
 
+model SID {
+  id                 String     @id @default(uuid())
+  code               String     @unique
+  waypoints_by_order Waypoint[]
 }
 
 model Airplane {

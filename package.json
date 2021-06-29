@@ -1,0 +1,20 @@
+{
+  "name": "airport",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tupe12334/airport.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tupe12334/airport/issues"
+  },
+  "homepage": "https://github.com/tupe12334/airport#readme"
+}
