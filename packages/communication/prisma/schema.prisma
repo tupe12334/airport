@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Airplane {
+  id         String    @id
+  waypointId String?   @unique
+  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
+}
+
+model Messege {
+  id      String   @id @default(uuid())
+  from    String
+  to      String?
+  content String
+  sent_at DateTime @default(now())
+}
+
+model Waypoint {
+  id       String    @id
+  name     String    @unique
+  Airplane Airplane?
+}

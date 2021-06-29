@@ -11,11 +11,23 @@ generator client {
 }
 
 model Waypoint {
-  id String @id @default(uuid())
+  id       String    @id @default(uuid())
+  name     String    @unique
+  Airpalne Airplane?
+
 
 }
 
 model Airplane {
-  id String @id @default(cuid())
+  id         String    @id @default(uuid())
+  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
+  waypointId String?
+}
 
+model Messege {
+  id      String   @id @default(uuid())
+  from    String
+  to      String?
+  content String
+  sent_at DateTime @default(now()) @updatedAt
 }
