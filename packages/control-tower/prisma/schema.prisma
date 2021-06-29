@@ -22,6 +22,7 @@ model Airplane {
   id         String    @id @default(uuid())
   Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
   waypointId String?
+  create_at  DateTime  @default(now())
 }
 
 model Messege {
