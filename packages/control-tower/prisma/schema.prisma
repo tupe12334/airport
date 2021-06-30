@@ -35,11 +35,15 @@ model ILS {
 }
 
 model Controller {
-  id             String   @id
   RF             RF
-  Airport        Airport? @relation(fields: [airportCountry, airportName], references: [country, name])
-  airportCountry String?
-  airportName    String?
+  Name           String
+  Airport        Airport @relation(fields: [airportCountry, airportName], references: [country, name])
+  airportCountry String
+  airportName    String
+
+
+  @@id([airportName, Name])
+  @@unique([airportCountry, airportName, RF])
 }
 
 model SID {
@@ -75,4 +79,5 @@ model Messege {
 enum RF {
   F120D5
   F121D4
+  F134D6
 }

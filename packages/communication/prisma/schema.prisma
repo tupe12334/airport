@@ -14,12 +14,13 @@ model Airplane {
   Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
 }
 
-model Messege {
+model Message {
   id      String   @id @default(uuid())
   from    String
   to      String?
   content String
   sent_at DateTime @default(now())
+  rf      RF
 }
 
 model Waypoint {
@@ -27,6 +28,8 @@ model Waypoint {
   name     String    @unique
   iLSId    String?
   sIDId    String?
+  groundId String?
+  Ground   Ground?   @relation(fields: [groundId], references: [id])
   ILS      ILS?      @relation(fields: [iLSId], references: [id])
   SID      SID?      @relation(fields: [sIDId], references: [id])
   Airplane Airplane?
@@ -42,4 +45,38 @@ model SID {
   id       String     @id
   code     String     @unique
   Waypoint Waypoint[]
+}
+
+model Airport {
+  country    String
+  name       String
+  Controller Controller[]
+  Ground     Ground[]
+
+  @@id([country, name])
+}
+
+model Controller {
+  RF             RF
+  airportCountry String
+  airportName    String
+  Name           String
+  Airport        Airport @relation(fields: [airportCountry, airportName], references: [country, name])
+
+  @@id([airportName, Name])
+  @@unique([airportCountry, airportName, RF], name: "Controller.airportCountry_airportName_RF_unique")
+}
+
+model Ground {
+  id             String     @id
+  airportCountry String
+  airportName    String
+  Airport        Airport    @relation(fields: [airportCountry, airportName], references: [country, name])
+  Waypoint       Waypoint[]
+}
+
+enum RF {
+  F120D5
+  F121D4
+  F134D6
 }

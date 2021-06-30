@@ -10,8 +10,8 @@ class SID extends BaseProcedure {
     this._socket.on(
       "message",
       async ({ content, from, id, to, sent_at }: Messege) => {
-        if (content.toLowerCase().in) {
-        }
+        // if (content.toLowerCase().in) {
+        // }
       }
     );
   }

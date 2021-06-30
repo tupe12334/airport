@@ -2,7 +2,7 @@ import express from "express";
 import { Server } from "socket.io";
 import { createServer } from "http";
 import PrismaInstanse from "./utils/prisma.service";
-import MessageParser from "./utils/MessageParser";
+import { Message } from "@prisma/client";
 const cors = require("cors");
 require("dotenv").config();
 const socketIO = require("socket.io");
@@ -24,18 +24,22 @@ io.on("connection", function (socket) {
     });
     console.log("A user disconnected");
   });
-  socket.on("message", async function (data) {
+  socket.on("message", async function (data: Message) {
     io.emit("message", data);
+    const lowerContent = data.content.toLowerCase();
     // console.log(data.content + " from " + data.from);
-    await PrismaInstanse.messege.create({
-      data: data,
-    });
+    // await PrismaInstanse.message.create({
+    //   data: data,
+    // });
     if (data.to === "Communication" && data.content === "radio check") {
       io.emit("message", {
         to: name,
         from: "Communiction",
         content: "Loud and clear",
       });
+    } else if (lowerContent.includes("moving")) {
+      const movingTo = lowerContent.substr(lowerContent.indexOf("to"));
+      socket.join(movingTo);
     }
   });
   socket.on("meta", (meta) => {

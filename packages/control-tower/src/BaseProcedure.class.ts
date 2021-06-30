@@ -29,23 +29,26 @@ export class BaseProcedure {
     try {
       assert(toWaypointId);
       assert(airplaneId);
-      this._socket.emit("message", {
-        from: airplaneId,
-        to: "Tel Aviv",
-        content: `In ${
-          (await this.prisma.waypoint.findUnique({
-            where: { id: toWaypointId },
-          }))!.name
-        } ${target ? `for ${target}` : ""}`,
-      });
-      return await this.prisma.airplane.update({
+
+      const newAirplane = await this.prisma.airplane.update({
         data: { waypointId: toWaypointId },
         where: { id: airplaneId },
       });
+      newAirplane &&
+        this._socket.emit("message", {
+          from: airplaneId,
+          to: "Tel Aviv",
+          content: `In ${
+            (await this.prisma.waypoint.findUnique({
+              where: { id: toWaypointId },
+            }))!.name
+          } ${target ? `for ${target}` : ""}`,
+        });
+      return newAirplane;
     } catch (error) {
       console.log(error);
 
-      throw new Error("54684916");
+      // throw new Error("54684916");
     }
   }
   async isWaypointFree(toWaypointId: string): Promise<boolean> {
@@ -83,12 +86,12 @@ export class BaseProcedure {
       const airplane = await this.prisma.airplane.create({
         data: { Waypoint: { connect: { name: waypointName } } },
       });
-      this.alertPlaneLoction(airplane.id, waypoint!.waypoint!.name);
+      this.alertPlaneLocation(airplane.id, waypoint!.waypoint!.name);
       return airplane;
     }
     return null;
   }
-  async alertPlaneLoction(airplaneId: string, waypointName: string) {
+  async alertPlaneLocation(airplaneId: string, waypointName: string) {
     this._socket.emit("message", {
       from: airplaneId,
       to: "Tel Aviv",

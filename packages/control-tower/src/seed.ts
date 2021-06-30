@@ -6,6 +6,13 @@ import prisma from "./utils/prisma.service";
       data: {
         country: "Israel",
         name: "Ben Gurion",
+        controllers: {
+          create: [
+            { RF: "F120D5", Name: "DEP" },
+            { RF: "F121D4", Name: "ACC" },
+            { RF: "F134D6", Name: "TWR" },
+          ],
+        },
         Ground: {
           create: {
             waypoints: {
@@ -42,9 +49,4 @@ import prisma from "./utils/prisma.service";
       },
     });
   } catch (error) {}
-  try {
-    await prisma.
-  } catch (error) {
-    
-  }
 })();
