@@ -7,6 +7,15 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Airport {
+  country     String
+  name        String
+  controllers Controller[]
+  Ground      Ground[]
+
+  @@id([country, name])
+}
+
 model Waypoint {
   id       String    @id @default(uuid())
   name     String    @unique
@@ -15,6 +24,8 @@ model Waypoint {
   ILS      ILS?      @relation(fields: [iLSId], references: [id])
   SID      SID?      @relation(fields: [sIDId], references: [id])
   Airpalne Airplane?
+  Ground   Ground?   @relation(fields: [groundId], references: [id])
+  groundId String?
 }
 
 model ILS {
@@ -23,10 +34,26 @@ model ILS {
   waypoints_by_order Waypoint[]
 }
 
+model Controller {
+  id             String   @id
+  RF             RF
+  Airport        Airport? @relation(fields: [airportCountry, airportName], references: [country, name])
+  airportCountry String?
+  airportName    String?
+}
+
 model SID {
   id                 String     @id @default(uuid())
   code               String     @unique
   waypoints_by_order Waypoint[]
+}
+
+model Ground {
+  id             String     @id @default(uuid())
+  airport        Airport    @relation(fields: [airportCountry, airportName], references: [country, name])
+  waypoints      Waypoint[]
+  airportCountry String
+  airportName    String
 }
 
 model Airplane {
@@ -42,4 +69,10 @@ model Messege {
   to      String?
   content String
   sent_at DateTime @default(now()) @updatedAt
+  rf      RF
+}
+
+enum RF {
+  F120D5
+  F121D4
 }
