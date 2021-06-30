@@ -13,5 +13,10 @@ WaypointController.get("/all", async (req, res, next) => {
 WaypointController.get("/:waypoint/airplane", async (req, res, next) => {
   res.json(await waypointService.getAirplaneInWaypoint(req.params.waypoint));
 });
-
+WaypointController.get("/procedure/:procedure", async (req, res) => {
+  res.json(await waypointService.getWaypointsOfProcedure(req.params.procedure));
+});
+WaypointController.get("/name/:name", async (req, res) => {
+  res.json(await waypointService.getStateOfWaypoint(req.params.name));
+});
 export default WaypointController;

@@ -6,6 +6,9 @@ import AirplaneController from "./airplane/airplane.controller";
 import ControlTowerCommunication from "./utils/socket";
 import cors from "cors";
 import ILS from "./ILS";
+import Ground from "./Ground";
+import socket from "./utils/socket";
+import { hardReset, reset } from "./utils/resetes";
 ControlTowerCommunication.Socket;
 const seed = require("./seed");
 require("dotenv-expand")(require("dotenv").config());
@@ -15,6 +18,13 @@ app.get("/ping", (req, res) => {
   res.send("work");
 });
 
+Ground;
+app.post("/reset", async (req, res) => {
+  reset();
+});
+app.post("/hardreset", async (req, res) => {
+  hardReset();
+});
 app.use("/" + Prisma.ModelName.Waypoint, WaypointController);
 app.use("/" + Prisma.ModelName.Airplane, AirplaneController);
 

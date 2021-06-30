@@ -11,5 +11,14 @@ class AirplaneApi {
       ).data;
     } catch (error) {}
   }
+  async getAirplaneById(id: string) {
+    try {
+      return (
+        await axios.get(
+          `${process.env.NEXT_PUBLIC_CONTROL_TOWER_URL}/airplane/id/${id}`
+        )
+      ).data.meta;
+    } catch (error) {}
+  }
 }
 export default new AirplaneApi();

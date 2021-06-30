@@ -1,10 +1,9 @@
 import { Accordion } from "@material-ui/core/";
+import { Waypoint } from "@prisma/client";
 import React from "react";
-import WaypointListItem from "./WaypointListItem";
+import WaypointListItem from "./Dashboard/Waypoints/WaypointListItem";
 
-const WaypointsList = (props: {
-  waypoints: [{ id: string; name: string }];
-}) => {
+const WaypointsList = (props: { waypoints: Waypoint[] }) => {
   return (
     <>
       {props.waypoints.map((waypoint, i) => (

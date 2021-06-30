@@ -2,8 +2,18 @@ import prisma from "./utils/prisma.service";
 (async () => {
   console.log("seed");
   try {
-    await prisma.waypoint.createMany({
-      data: [{ name: "Runway" }, { name: "K" }, { name: "Z" }],
+    await prisma.airport.create({
+      data: {
+        country: "Israel",
+        name: "Ben Gurion",
+        Ground: {
+          create: {
+            waypoints: {
+              create: [{ name: "Runway" }, { name: "K" }, { name: "Z" }],
+            },
+          },
+        },
+      },
     });
   } catch (error) {}
   try {
@@ -24,7 +34,6 @@ import prisma from "./utils/prisma.service";
     await prisma.sID.create({
       data: {
         code: "1",
-
         waypoints_by_order: {
           connectOrCreate: [
             { where: { name: "departure" }, create: { name: "departure" } },
@@ -33,4 +42,9 @@ import prisma from "./utils/prisma.service";
       },
     });
   } catch (error) {}
+  try {
+    await prisma.
+  } catch (error) {
+    
+  }
 })();

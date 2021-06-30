@@ -19,12 +19,12 @@ const RadioLog = () => {
       </Typography>
       <List>
         {log.map((message, i) => (
-          <>
-            <ListItem key={i}>{`${message.to ? message.to : ""} ${
+          <div key={i}>
+            <ListItem>{`${message.to ? message.to : ""} ${
               message.from ? "From " + message.from : ""
             } ${message.content ? message.content : ""}`}</ListItem>{" "}
             <Divider />
-          </>
+          </div>
         ))}
       </List>
     </Paper>

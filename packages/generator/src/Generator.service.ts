@@ -22,6 +22,18 @@ class GeneratorService {
       ).data;
     } catch (error) {}
   }
+  async getK() {
+    const url = process.env.CONTROL_TOWER_URL + "/waypoint/name/" + "K";
+    try {
+      return (await axios.get(url)).data;
+    } catch (error) {}
+  }
+  async addPlaneToWaypoint(waypointName: string) {
+    const url = process.env.CONTROL_TOWER_URL + "/airplane/add/" + waypointName;
+    try {
+      return (await axios.post(url)).data;
+    } catch (error) {}
+  }
 }
 
 export default new GeneratorService();

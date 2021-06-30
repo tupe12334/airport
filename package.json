@@ -18,7 +18,7 @@
     "url": "https://github.com/tupe12334/airport/issues"
   },
   "homepage": "https://github.com/tupe12334/airport#readme",
-  "dependencies": {
+  "devDependencies": {
     "lerna": "^4.0.0"
   }
 }

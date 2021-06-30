@@ -20,7 +20,7 @@ io.on("connection", function (socket) {
     io.emit("message", {
       to: name,
       from: "Communication",
-      content: "Bye good day",
+      content: "Bye, good day",
     });
     console.log("A user disconnected");
   });
