@@ -86,10 +86,13 @@ export class BaseProcedure {
       const airplane = await this.prisma.airplane.create({
         data: { Waypoint: { connect: { name: waypointName } } },
       });
-      this.alertPlaneLocation(airplane.id, waypoint!.waypoint!.name);
+      this.alertPlaneJoin(airplane.id, waypoint!.waypoint!.name);
       return airplane;
     }
     return null;
+  }
+  async alertPlaneJoin(airplaneId: string, waypointName: string) {
+    this.alertPlaneLocation(airplaneId, waypointName);
   }
   async alertPlaneLocation(airplaneId: string, waypointName: string) {
     this._socket.emit("message", {
