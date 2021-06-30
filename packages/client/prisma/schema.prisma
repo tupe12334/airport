@@ -14,12 +14,24 @@ model Airplane {
   Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
 }
 
+model ILS {
+  id       String     @id
+  code     String     @unique
+  Waypoint Waypoint[]
+}
+
 model Messege {
-  id      String   @id @default(uuid())
+  id      String   @id
   from    String
   to      String?
   content String
   sent_at DateTime @default(now())
+}
+
+model SID {
+  id       String     @id
+  code     String     @unique
+  Waypoint Waypoint[]
 }
 
 model Waypoint {
@@ -30,16 +42,4 @@ model Waypoint {
   ILS      ILS?      @relation(fields: [iLSId], references: [id])
   SID      SID?      @relation(fields: [sIDId], references: [id])
   Airplane Airplane?
-}
-
-model ILS {
-  id       String     @id
-  code     String     @unique
-  Waypoint Waypoint[]
-}
-
-model SID {
-  id       String     @id
-  code     String     @unique
-  Waypoint Waypoint[]
 }

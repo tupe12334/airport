@@ -5,6 +5,7 @@ import WaypointController from "./waypoint/waypoint.controller";
 import AirplaneController from "./airplane/airplane.controller";
 import ControlTowerCommunication from "./utils/socket";
 import cors from "cors";
+import ILS from "./ILS";
 ControlTowerCommunication.Socket;
 const seed = require("./seed");
 require("dotenv-expand")(require("dotenv").config());
@@ -13,6 +14,7 @@ app.use(cors());
 app.get("/ping", (req, res) => {
   res.send("work");
 });
+
 app.use("/" + Prisma.ModelName.Waypoint, WaypointController);
 app.use("/" + Prisma.ModelName.Airplane, AirplaneController);
 
@@ -28,10 +30,10 @@ function getAllWaypoints() {
     .findUnique({
       where: { code: "1" },
     })
+
     .waypoints_by_order();
   return Promise.all([waypoints, ils, ils1Waypoints]);
 }
-
 async function getAllAirplainesInILS(ilsID: string) {
   const ilsWaypoints = await PrismaInstanse.iLS
     .findUnique({
@@ -63,13 +65,14 @@ async function moveAirplaneForward(
 }
 
 setInterval(async () => {
-  const [waypoints, ils, ils1Waypoints] = await getAllWaypoints();
-  for (let i = 0; i < ils1Waypoints.length - 1; i++) {
-    const waypoint = ils1Waypoints[i];
-    const airplane = await PrismaInstanse.airplane.findFirst({
-      where: { waypointId: waypoint.id },
-    });
-    // airplane?.id &&
-    //   moveAirplaneForward(airplane.id, i, ils1Waypoints[i + 1]?.id);
-  }
+  // console.log(await ILS.getStateOfWaypoint("W1"));
+  // const [waypoints, ils, ils1Waypoints] = await getAllWaypoints();
+  // for (let i = 0; i < ils1Waypoints.length - 1; i++) {
+  //   const waypoint = ils1Waypoints[i];
+  //   const airplane = await PrismaInstanse.airplane.findFirst({
+  //     where: { waypointId: waypoint.id },
+  //   });
+  //   // airplane?.id &&
+  //   //   moveAirplaneForward(airplane.id, i, ils1Waypoints[i + 1]?.id);
+  // }
 }, 1000);

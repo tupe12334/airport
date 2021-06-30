@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:debug": "lerna run start:debug"
   },
   "repository": {
     "type": "git",
@@ -16,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/tupe12334/airport/issues"
   },
-  "homepage": "https://github.com/tupe12334/airport#readme"
+  "homepage": "https://github.com/tupe12334/airport#readme",
+  "dependencies": {
+    "lerna": "^4.0.0"
+  }
 }

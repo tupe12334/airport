@@ -6,7 +6,7 @@ require("dotenv-expand")(require("dotenv").config());
     console.log(W1open);
 
     W1open &&
-      Math.random() > 0.5 &&
+      Math.random() > 0.8 &&
       console.log(await GeneratorService.addPlaneToW1());
   }, 1000);
 })();

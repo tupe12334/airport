@@ -7,7 +7,7 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start:watch": "nodemon ./src/index.ts"
+    "start:debug": "nodemon ./src/index.ts"
   },
   "dependencies": {
     "@prisma/client": "^2.25.0",

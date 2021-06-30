@@ -1,23 +1,20 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+generator client {
+  provider = "prisma-client-js"
+}
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
-}
-
 model Waypoint {
   id       String    @id @default(uuid())
   name     String    @unique
-  Airpalne Airplane?
-  ILS      ILS?      @relation(fields: [iLSId], references: [id])
   iLSId    String?
-  SID      SID?      @relation(fields: [sIDId], references: [id])
   sIDId    String?
+  ILS      ILS?      @relation(fields: [iLSId], references: [id])
+  SID      SID?      @relation(fields: [sIDId], references: [id])
+  Airpalne Airplane?
 }
 
 model ILS {
@@ -34,9 +31,9 @@ model SID {
 
 model Airplane {
   id         String    @id @default(uuid())
-  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
-  waypointId String?
+  waypointId String?   @unique
   create_at  DateTime  @default(now())
+  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
 }
 
 model Messege {

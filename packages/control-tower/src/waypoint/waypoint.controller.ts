@@ -10,5 +10,8 @@ WaypointController.get("/isW1open", async (req, res, next) => {
 WaypointController.get("/all", async (req, res, next) => {
   res.json(await waypointService.getAllWaypoints());
 });
+WaypointController.get("/:waypoint/airplane", async (req, res, next) => {
+  res.json(await waypointService.getAirplaneInWaypoint(req.params.waypoint));
+});
 
 export default WaypointController;

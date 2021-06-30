@@ -20,7 +20,7 @@ const Header = () => {
     };
   }, []);
   return (
-    <AppBar>
+    <AppBar position="static">
       <div style={{ justifyContent: "space-between", flexDirection: "row" }}>
         <Toolbar
         // style={{ justifyContent: "space-between" }}
