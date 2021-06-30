@@ -11,63 +11,84 @@ model Airport {
   country     String
   name        String
   controllers Controller[]
-  Ground      Ground[]
+  Ground      Ground?
+  ILSs        ILS?
+  SIDs        SID[]
 
   @@id([country, name])
 }
 
 model Waypoint {
-  id                    String     @id @default(uuid())
-  name                  String     @unique
-  iLSId                 String?
-  sIDId                 String?
-  groundId              String?
-  Ground                Ground?    @relation(fields: [groundId], references: [id])
-  ILS                   ILS?       @relation(fields: [iLSId], references: [id])
-  SID                   SID?       @relation(fields: [sIDId], references: [id])
-  Airpalne              Airplane?
-  controller            Controller @relation(fields: [controllerAirportName, controllerName], references: [airportName, Name])
-  controllerAirportName String
-  controllerName        String
+  name           String      @unique
+  sIDId          String?
+  AirportName    String?
+  ControllerName String?
+  Country        String
+  Ground         Ground?     @relation(fields: [groundCountry, groundAirportName], references: [Country, AirportName])
+  ILS            ILS?        @relation(fields: [iLSAirportCountry, iLSAirportName], references: [AirportCountry, AirportName])
+  Controller     Controller? @relation(fields: [controllerAirportCountry, controllerAirportName, controllerName], references: [AirportCountry, AirportName, Name])
+  SID            SID?        @relation(fields: [sIDAirportCountry, sIDAirportName], references: [AirportCountry, AirportName])
+  Airplane       Airplane?
+
+  groundCountry            String?
+  groundAirportName        String?
+  iLSAirportCountry        String?
+  iLSAirportName           String?
+  controllerAirportCountry String?
+  controllerAirportName    String?
+  controllerName           String?
+  sIDAirportCountry        String?
+  sIDAirportName           String?
+  @@id([Country, name])
 }
 
 model ILS {
-  id                 String     @id @default(uuid())
-  code               String     @unique
+  AirportCountry     String
+  AirportName        String
+  Airport            Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
   waypoints_by_order Waypoint[]
+
+  @@id([AirportCountry, AirportName])
 }
 
 model Controller {
   RF             RF
-  airportCountry String
-  airportName    String
   Name           String
-  Airport        Airport @relation(fields: [airportCountry, airportName], references: [country, name])
+  AirportCountry String
+  AirportName    String
+  Airport        Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
+  Waypoints      Waypoint[]
 
-  @@id([airportName, Name])
-  @@unique([airportCountry, airportName, RF], name: "Controller.airportCountry_airportName_RF_unique")
-  Waypoint Waypoint[]
+  @@id([AirportCountry, AirportName, Name])
 }
 
 model SID {
-  id                 String     @id @default(uuid())
-  code               String     @unique
+  AirportCountry     String
+  AirportName        String
+  Airport            Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
   waypoints_by_order Waypoint[]
+
+  @@id([AirportCountry, AirportName])
 }
 
 model Ground {
-  id             String     @id @default(uuid())
-  airportCountry String
-  airportName    String
-  airport        Airport    @relation(fields: [airportCountry, airportName], references: [country, name])
-  waypoints      Waypoint[]
+  Country     String
+  AirportName String
+  Airport     Airport    @relation(fields: [Country, AirportName], references: [country, name])
+  waypoints   Waypoint[]
+
+  @@id([Country, AirportName])
 }
 
 model Airplane {
-  id         String    @id @default(uuid())
-  waypointId String?   @unique
-  create_at  DateTime  @default(now())
-  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
+  id           String   @id @default(uuid())
+  create_at    DateTime @default(now())
+  waypointName String
+  Country      String
+  Waypoint     Waypoint @relation(fields: [Country, waypointName], references: [Country, name])
+  valid        Boolean  @default(true)
+
+  @@unique([Country, waypointName])
 }
 
 model Message {

@@ -8,11 +8,11 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import React, { useEffect, useState } from "react";
 import { useSocket } from "use-socketio";
 import AirplaneApi from "../../../api/airplane";
-import { Airplane, Messege, Waypoint } from "@prisma/client";
+import { Airplane, Message, Waypoint } from "@prisma/client";
 
 const WaypointListItem = (props: { waypoint: Waypoint }) => {
   const [airplane, setAirplane] = useState<Airplane>(null);
-  useSocket("message", async (log: Messege) => {
+  useSocket("message", async (log: Message) => {
     const { content, from, to } = log;
     if (
       content.includes(props.waypoint.name) &&
@@ -30,6 +30,9 @@ const WaypointListItem = (props: { waypoint: Waypoint }) => {
       setAirplane(null);
     }
   });
+  // useEffect(() => {
+  //   console.log(airplane);
+  // }, [airplane]);
   useEffect(() => {
     AirplaneApi.getAirplaneFromWaypoint(props.waypoint.name).then(setAirplane);
   }, []);
@@ -41,7 +44,9 @@ const WaypointListItem = (props: { waypoint: Waypoint }) => {
         id="panel1a-header"
       >
         <Typography>
-          {props.waypoint.name} {airplane ? " ✈️" : null}
+          {props.waypoint.name}
+          {airplane ? ` ✈️ ${!airplane.valid ? "🆘" : ""}` : null}
+          {/* {JSON.stringify(airplane)} */}
         </Typography>
       </AccordionSummary>
       <AccordionDetails>

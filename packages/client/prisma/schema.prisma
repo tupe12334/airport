@@ -8,38 +8,100 @@ datasource db {
 }
 
 model Airplane {
-  id         String    @id
-  waypointId String?   @unique
-  create_at  DateTime  @default(now())
-  Waypoint   Waypoint? @relation(fields: [waypointId], references: [id])
+  id           String   @id
+  create_at    DateTime @default(now())
+  waypointName String
+  Country      String
+  valid        Boolean  @default(true)
+  Waypoint     Waypoint @relation(fields: [Country, waypointName], references: [Country, name])
+
+  @@unique([Country, waypointName], name: "Airplane.Country_waypointName_unique")
 }
 
 model ILS {
-  id       String     @id
-  code     String     @unique
-  Waypoint Waypoint[]
+  AirportCountry String
+  AirportName    String
+  Airport        Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
+  Waypoint       Waypoint[]
+
+  @@id([AirportCountry, AirportName])
 }
 
-model Messege {
+model SID {
+  AirportCountry String
+  AirportName    String
+  Airport        Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
+  Waypoint       Waypoint[]
+
+  @@id([AirportCountry, AirportName])
+}
+
+model Waypoint {
+  name                     String      @unique
+  sIDId                    String?
+  AirportName              String?
+  ControllerName           String?
+  Country                  String
+  controllerAirportCountry String?
+  controllerAirportName    String?
+  controllerName           String?
+  groundAirportName        String?
+  groundCountry            String?
+  iLSAirportCountry        String?
+  iLSAirportName           String?
+  sIDAirportCountry        String?
+  sIDAirportName           String?
+  Controller               Controller? @relation(fields: [controllerAirportCountry, controllerAirportName, controllerName], references: [AirportCountry, AirportName, Name])
+  Ground                   Ground?     @relation(fields: [groundCountry, groundAirportName], references: [Country, AirportName])
+  ILS                      ILS?        @relation(fields: [iLSAirportCountry, iLSAirportName], references: [AirportCountry, AirportName])
+  SID                      SID?        @relation(fields: [sIDAirportCountry, sIDAirportName], references: [AirportCountry, AirportName])
+  Airplane                 Airplane?
+
+  @@id([Country, name])
+}
+
+model Airport {
+  country    String
+  name       String
+  Controller Controller[]
+  Ground     Ground?
+  ILS        ILS?
+  SID        SID?
+
+  @@id([country, name])
+}
+
+model Controller {
+  RF             RF
+  Name           String
+  AirportCountry String
+  AirportName    String
+  Airport        Airport    @relation(fields: [AirportCountry, AirportName], references: [country, name])
+  Waypoint       Waypoint[]
+
+  @@id([AirportCountry, AirportName, Name])
+}
+
+model Ground {
+  AirportName String
+  Country     String
+  Airport     Airport    @relation(fields: [Country, AirportName], references: [country, name])
+  Waypoint    Waypoint[]
+
+  @@id([Country, AirportName])
+}
+
+model Message {
   id      String   @id
   from    String
   to      String?
   content String
   sent_at DateTime @default(now())
+  rf      RF
 }
 
-model SID {
-  id       String     @id
-  code     String     @unique
-  Waypoint Waypoint[]
-}
-
-model Waypoint {
-  id       String    @id
-  name     String    @unique
-  iLSId    String?
-  sIDId    String?
-  ILS      ILS?      @relation(fields: [iLSId], references: [id])
-  SID      SID?      @relation(fields: [sIDId], references: [id])
-  Airplane Airplane?
+enum RF {
+  F120D5
+  F121D4
+  F134D6
 }

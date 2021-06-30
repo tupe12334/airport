@@ -7,7 +7,7 @@ let AirplaneController = Router();
 
 AirplaneController.post("/addToW1", async (req, res, next) => {
   try {
-    const airplane = await ILS.addPlaneToILS();
+    const airplane = await ILS.addPlaneToWaypoint("W1");
     res.json({ work: true, meta: airplane });
   } catch (error) {
     res.json({ work: false, meta: null });

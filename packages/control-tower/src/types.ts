@@ -1,1 +1,1 @@
-export type Target = "Landing" | "Departure";
+export type Target = "Landing" | "Departure" | null;

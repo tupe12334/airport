@@ -1,5 +1,5 @@
 import { BaseProcedure } from "./BaseProcedure.class";
-import { Messege } from "@prisma/client";
+import { Message } from "@prisma/client";
 import { sleep } from "./utils/time";
 class Ground extends BaseProcedure {
   private _ground = this.prisma.ground.findFirst();
@@ -11,7 +11,7 @@ class Ground extends BaseProcedure {
   initSocket() {
     this._socket.on(
       "message",
-      async ({ content, from, id, to, sent_at }: Messege) => {
+      async ({ content, from, id, to, sent_at }: Message) => {
         const freeToContion = setInterval(async () => {
           if (
             content.toLowerCase().includes("runway") ||
@@ -24,10 +24,10 @@ class Ground extends BaseProcedure {
                 const taxiZ = waypoints.find(
                   (waypoint) => waypoint.name === "Z"
                 );
-                if (taxiZ?.id) {
-                  if (await this.isWaypointFree(taxiZ!.id)) {
+                if (taxiZ?.name) {
+                  if (await this.isWaypointFreeByName(taxiZ!.name)) {
                     clearInterval(freeToContion);
-                    await this.moveAirplane(from, taxiZ.id);
+                    await this.moveAirplaneToWaypoinyByName(from, taxiZ.name);
                     setTimeout(() => {
                       this.removeAirplane(from);
                     }, 10000);
@@ -44,7 +44,12 @@ class Ground extends BaseProcedure {
                 const runway = waypoints.find(
                   (waypoint) => waypoint.name.toLowerCase() === "runway"
                 );
-                runway?.id && this.moveAirplane(from, runway.id, "Departure");
+                runway?.name &&
+                  this.moveAirplaneToWaypoinyByName(
+                    from,
+                    runway.name,
+                    "Departure"
+                  );
               }
             }
           }

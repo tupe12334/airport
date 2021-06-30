@@ -7,44 +7,70 @@ import prisma from "./utils/prisma.service";
         country: "Israel",
         name: "Ben Gurion",
         controllers: {
-          create: [
-            { RF: "F120D5", Name: "DEP" },
-            { RF: "F121D4", Name: "ACC" },
-            { RF: "F134D6", Name: "TWR" },
-          ],
+          createMany: {
+            data: [
+              { RF: "F120D5", Name: "DEP" },
+              { RF: "F121D4", Name: "ACC" },
+              { RF: "F134D6", Name: "TWR" },
+            ],
+          },
         },
         Ground: {
           create: {
             waypoints: {
-              create: [{ name: "Runway" }, { name: "K" }, { name: "Z" }],
+              createMany: {
+                data: [
+                  {
+                    ControllerName: "TWR",
+                    name: "Runway",
+                    Country: "Israel",
+                  },
+                  {
+                    ControllerName: "TWR",
+                    name: "K",
+                    Country: "Israel",
+                  },
+                  {
+                    ControllerName: "TWR",
+                    name: "Z",
+                    Country: "Israel",
+                  },
+                ],
+              },
             },
           },
         },
-      },
-    });
-  } catch (error) {}
-  try {
-    await prisma.iLS.create({
-      data: {
-        code: "1",
-        waypoints_by_order: {
-          connectOrCreate: [
-            { where: { name: "W1" }, create: { name: "W1" } },
-            { where: { name: "W2" }, create: { name: "W2" } },
-            { where: { name: "Final" }, create: { name: "Final" } },
-          ],
+        ILSs: {
+          create: {
+            waypoints_by_order: {
+              createMany: {
+                data: [
+                  {
+                    ControllerName: "ACC",
+                    name: "W1",
+                    Country: "Israel",
+                  },
+                  {
+                    ControllerName: "ACC",
+                    name: "W2",
+                    Country: "Israel",
+                  },
+                  {
+                    ControllerName: "ACC",
+                    name: "Final",
+                    Country: "Israel",
+                  },
+                ],
+              },
+            },
+          },
         },
-      },
-    });
-  } catch (error) {}
-  try {
-    await prisma.sID.create({
-      data: {
-        code: "1",
-        waypoints_by_order: {
-          connectOrCreate: [
-            { where: { name: "departure" }, create: { name: "departure" } },
-          ],
+        SIDs: {
+          create: {
+            waypoints_by_order: {
+              createMany: { data: [{ Country: "Israel", name: "Departure" }] },
+            },
+          },
         },
       },
     });
