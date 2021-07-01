@@ -5,12 +5,10 @@ services:
     volumes:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
-      - "8080:80"
+      - "80:80"
   communication:
     container_name: communication
     restart: always
-    # ports:
-    #   - 5001:5001
     build: ./packages/communication
     networks:
       - airport-net

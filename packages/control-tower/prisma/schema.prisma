@@ -13,22 +13,16 @@ model Airport {
   controllers Controller[]
   Ground      Ground?
   ILSs        ILS?
-  SIDs        SID[]
+  Runways     Runway[]
+  SIDs        SID?
 
-  Runways Runway[]
   @@id([country, name])
 }
 
 model Waypoint {
-  name        String     @unique
-  AirportName String?
-  Country     String
-  Ground      Ground?    @relation(fields: [groundCountry, groundAirportName], references: [Country, AirportName])
-  ILS         ILS?       @relation(fields: [iLSAirportCountry, iLSAirportName], references: [AirportCountry, AirportName])
-  Controller  Controller @relation(fields: [Country, ControllerName], references: [Country, Name])
-  SID         SID?       @relation(fields: [sIDCountry, sIDAirportName], references: [Country, AirportName])
-  Airplane    Airplane?
-
+  name              String     @unique
+  AirportName       String?
+  Country           String
   groundCountry     String?
   groundAirportName String?
   iLSAirportCountry String?
@@ -39,6 +33,12 @@ model Waypoint {
   Lat               Float
   Lng               Float
   sIDCountry        String?
+  Controller        Controller @relation(fields: [Country, ControllerName], references: [Country, Name])
+  Ground            Ground?    @relation(fields: [groundCountry, groundAirportName], references: [Country, AirportName])
+  ILS               ILS?       @relation(fields: [iLSAirportCountry, iLSAirportName], references: [AirportCountry, AirportName])
+  SID               SID?       @relation(fields: [sIDCountry, sIDAirportName], references: [Country, AirportName])
+  Airplane          Airplane?
+
   @@id([Country, name])
 }
 
@@ -52,14 +52,14 @@ model ILS {
 }
 
 model Controller {
-  RF        RF
-  Name      String
-  Country   String
-  Airport   Airport?   @relation(fields: [airportCountry, airportName], references: [country, name])
-  Waypoints Waypoint[]
-
+  RF             RF
+  Name           String
+  Country        String
   airportCountry String?
   airportName    String?
+  Airport        Airport?   @relation(fields: [airportCountry, airportName], references: [country, name])
+  Waypoints      Waypoint[]
+
   @@id([Country, Name])
 }
 
@@ -84,13 +84,15 @@ model Ground {
 model Airplane {
   id           String    @id @default(uuid())
   create_at    DateTime  @default(now())
+  waypointName String?
   Country      String
-  Waypoint     Waypoint? @relation(fields: [Country, waypointName], references: [Country, name])
   Valid        Boolean   @default(true)
   Target       Target
   rf           RF
+  Waypoint     Waypoint? @relation(fields: [Country, waypointName], references: [Country, name])
   Runway       Runway?
-  waypointName String?
+
+  @@unique([Country, waypointName], name: "Airplane_Country_waypointName_unique")
 }
 
 model Message {
@@ -104,15 +106,15 @@ model Message {
 
 model Runway {
   Diraction   Float
-  Airport     Airport   @relation(fields: [Country, AirportName], references: [country, name])
   Country     String
   AirportName String
   Lat         Float
   Lng         Float
   Length      Float
+  airplaneId  String?   @unique
+  Airport     Airport   @relation(fields: [Country, AirportName], references: [country, name])
   Airplane    Airplane? @relation(fields: [airplaneId], references: [id])
 
-  airplaneId String?
   @@id([Diraction, AirportName])
 }
 
