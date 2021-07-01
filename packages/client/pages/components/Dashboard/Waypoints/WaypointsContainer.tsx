@@ -1,12 +1,13 @@
 import React from "react";
-import ProcedureList from "./ProcedureList";
+import LocationsSections from "./LocationsSections";
 
 const WaypointsContainer = () => {
   return (
     <div>
-      <ProcedureList name="ILS" />
-      <ProcedureList name="SID" />
-      <ProcedureList name="Ground" />
+      <LocationsSections name="ILS" type="waypoint" />
+      <LocationsSections name="SID" type="waypoint" />
+      <LocationsSections name="Ground" type="waypoint" />
+      <LocationsSections name="Runway" type="runway" airportName="Ben Gurion" />
     </div>
   );
 };

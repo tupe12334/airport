@@ -1,5 +1,7 @@
-import { Messege } from "@prisma/client";
+import { Message } from "@prisma/client";
+import { AirplanePool } from ".";
 import { BaseProcedure } from "./BaseProcedure.class";
+import { sleep } from "./utils/time";
 
 class SID extends BaseProcedure {
   constructor() {
@@ -9,10 +11,13 @@ class SID extends BaseProcedure {
   initSocket() {
     this._socket.on(
       "message",
-      async ({ content, from, id, to, sent_at }: Messege) => {
-        // if (content.toLowerCase().in) {
-        // }
+      async ({ content, from, to, sent_at }: Message) => {
+        if (content.toLowerCase().includes("in departure")) {
+          await sleep(1000);
+          await AirplanePool[from].removeSelf();
+        }
       }
     );
   }
 }
+export default new SID();

@@ -15,7 +15,7 @@ const io = new Server(http, { cors: { origin: "*" } });
 // io.emit("message", "test");
 io.on("connection", function (socket) {
   let name = "";
-  console.log("A user connected");
+  console.log("A user connected " + socket.id);
   socket.on("disconnect", function () {
     io.emit("message", {
       to: name,

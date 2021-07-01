@@ -1,6 +1,7 @@
 import { BaseProcedure } from "./BaseProcedure.class";
-import { Message } from "@prisma/client";
+import { Message, RF } from "@prisma/client";
 import { sleep } from "./utils/time";
+import { AirplanePool } from ".";
 class Ground extends BaseProcedure {
   private _ground = this.prisma.ground.findFirst();
   private _waypoints = this._ground.waypoints();
@@ -11,6 +12,7 @@ class Ground extends BaseProcedure {
   initSocket() {
     this._socket.on(
       "message",
+
       async ({ content, from, id, to, sent_at }: Message) => {
         const freeToContion = setInterval(async () => {
           if (
@@ -19,21 +21,37 @@ class Ground extends BaseProcedure {
           ) {
             const [waypoints] = await Promise.all([this._waypoints]);
             if (content.toLowerCase().includes("runway")) {
-              if (content.toLowerCase().includes("landing")) {
+              if (content.toLowerCase().includes("arrive")) {
                 await sleep(1000);
                 const taxiZ = waypoints.find(
                   (waypoint) => waypoint.name === "Z"
                 );
                 if (taxiZ?.name) {
                   if (await this.isWaypointFreeByName(taxiZ!.name)) {
-                    clearInterval(freeToContion);
-                    await this.moveAirplaneToWaypoinyByName(from, taxiZ.name);
-                    setTimeout(() => {
-                      this.removeAirplane(from);
-                    }, 10000);
+                    try {
+                      clearInterval(freeToContion);
+                      await AirplanePool[from].moveToLocation(taxiZ.name);
+                      await sleep(3000);
+                      await AirplanePool[from].removeSelf();
+                    } catch (error) {}
                   }
                 }
               } else if (content.toLowerCase().includes("departure")) {
+                try {
+                  const ROTEMWaypoint = await this.getStateOfWaypoint("ROTEM");
+                  if (ROTEMWaypoint?.waypoint?.name) {
+                    if (
+                      await this.isWaypointFreeByName(
+                        ROTEMWaypoint.waypoint.name
+                      )
+                    ) {
+                      await sleep(1000);
+                      AirplanePool[from].moveToLocation(
+                        ROTEMWaypoint.waypoint.name
+                      );
+                    }
+                  }
+                } catch (error) {}
               }
             } else if (
               content.toLowerCase().includes("in") &&
@@ -41,15 +59,9 @@ class Ground extends BaseProcedure {
             ) {
               const airplaneInRunway = await this.airplaneOfRunway();
               if (!airplaneInRunway) {
-                const runway = waypoints.find(
-                  (waypoint) => waypoint.name.toLowerCase() === "runway"
-                );
-                runway?.name &&
-                  this.moveAirplaneToWaypoinyByName(
-                    from,
-                    runway.name,
-                    "Departure"
-                  );
+                try {
+                  AirplanePool[from].enterToRunway();
+                } catch (error) {}
               }
             }
           }

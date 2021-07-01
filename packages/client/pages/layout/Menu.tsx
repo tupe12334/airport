@@ -6,8 +6,9 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@material-ui/core";
-import { SyncProblem, Loop } from "@material-ui/icons";
+import { SyncProblem, Loop, Home, List as ListIcon } from "@material-ui/icons";
 import axios from "axios";
+import Link from "next/link";
 
 const Menu = (props: { open: boolean; setOpen }) => {
   return (
@@ -22,6 +23,22 @@ const Menu = (props: { open: boolean; setOpen }) => {
       }}
     >
       <List>
+        <Link href="/" passHref>
+          <ListItem button>
+            <ListItemIcon>
+              <Home />
+            </ListItemIcon>
+            <ListItemText primary="Home" />
+          </ListItem>
+        </Link>
+        <Link href="/log" passHref>
+          <ListItem button>
+            <ListItemIcon>
+              <ListIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logs" />
+          </ListItem>
+        </Link>
         <div
           onClick={() => {
             axios.post(`${process.env.NEXT_PUBLIC_CONTROL_TOWER_URL}/reset`);

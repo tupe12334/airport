@@ -1,4 +1,3 @@
-import React from "react";
 import { useSocket } from "use-socketio";
 
 const useSocketMeta = () => {
@@ -10,6 +9,14 @@ const useSocketMeta = () => {
     });
     socket.emit("meta", { name: "Client" });
   });
+  {
+    const { socket } = useSocket("disconnect", () => {
+      console.log("try agin");
+
+      socket.io.reconnect();
+    });
+  }
+
   return null;
 };
 

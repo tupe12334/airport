@@ -6,10 +6,10 @@ require("dotenv-expand")(require("dotenv").config());
     const W1open = await GeneratorService.checkifW1IsOpen();
     W1open &&
       Math.random() > randomTarget &&
-      console.log(await GeneratorService.addPlaneToW1());
+      (await GeneratorService.addPlaneToWaypoint("W1"));
     const K = await GeneratorService.getK();
     !K?.airplane &&
-      Math.random() + 0.5 > randomTarget &&
+      Math.random() > randomTarget + 0.15 &&
       (await GeneratorService.addPlaneToWaypoint("K"));
-  }, 1000);
+  }, 10000);
 })();

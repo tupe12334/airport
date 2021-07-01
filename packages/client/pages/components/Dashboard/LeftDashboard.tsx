@@ -1,5 +1,4 @@
 import React from "react";
-import WaypointsList from "../WaypointsList";
 import RadioLog from "../RadioLog";
 import WaypointsContainer from "./Waypoints/WaypointsContainer";
 

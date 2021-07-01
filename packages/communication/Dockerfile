@@ -1,5 +1,5 @@
 FROM node:16-alpine
-WORKDIR  /usr/airport/client
+WORKDIR /usr/airport/com
 COPY package*.json .
 RUN npm ci
 COPY . .

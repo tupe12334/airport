@@ -6,12 +6,14 @@ class WaypointService extends BaseProcedure {
     super();
   }
   async isW1open() {
-    const W1 = await PrismaInstance.waypoint
-      .findFirst({ where: { name: "W1" } })
-      .Airplane();
-    // console.log(W1);
-
-    return W1 ? false : true;
+    try {
+      const W1 = await PrismaInstance.waypoint
+        .findFirst({ where: { name: "W1" } })
+        .Airplane();
+      return W1 ? false : true;
+    } catch (error) {
+      return false;
+    }
   }
   async getAllWaypoints() {
     return await PrismaInstance.waypoint.findMany();
@@ -22,24 +24,12 @@ class WaypointService extends BaseProcedure {
       .Airplane();
   }
   async getWaypointsOfProcedure(procedure: string) {
-    switch (procedure) {
-      case "SID":
-        return await this.prisma.waypoint.findMany({
-          where: { sIDId: { not: null } },
-        });
-
-      case "ILS":
-        return await this.prisma.waypoint.findMany({
-          where: { ILS: { isNot: null } },
-        });
-
-      case "Ground":
-        return await this.prisma.waypoint.findMany({
-          where: { Ground: { isNot: null } },
-        });
-      default:
-        break;
+    if (procedure === "Runway") {
+      return await this.prisma.runway.findMany({});
     }
+    return await this.prisma.waypoint.findMany({
+      where: { [procedure]: { isNot: null } },
+    });
   }
 }
 

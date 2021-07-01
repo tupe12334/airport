@@ -2,8 +2,9 @@ import { PrismaClient } from "@prisma/client";
 class PrismaService extends PrismaClient {
   constructor() {
     super();
+    console.log("dsalkdgfoidsgajglg");
+
     this.$connect();
   }
 }
-const PrismaInstanse = new PrismaService();
-export default PrismaInstanse;
+export default new PrismaService();

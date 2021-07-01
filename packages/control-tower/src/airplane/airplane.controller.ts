@@ -7,7 +7,7 @@ let AirplaneController = Router();
 
 AirplaneController.post("/addToW1", async (req, res, next) => {
   try {
-    const airplane = await ILS.addPlaneToWaypoint("W1");
+    const airplane = await ILS.addPlaneToWaypoint("W1", "Arrive");
     res.json({ work: true, meta: airplane });
   } catch (error) {
     res.json({ work: false, meta: null });
@@ -35,7 +35,12 @@ AirplaneController.get("/name/:name", async (req, res, next) => {
 });
 AirplaneController.post("/add/:waypointName", async (req, res, next) => {
   try {
-    res.json(await Ground.addPlaneToWaypoint(req.params.waypointName));
+    res.json(
+      await Ground.addPlaneToWaypoint(
+        req.params.waypointName,
+        req.params.waypointName === "W1" ? "Arrive" : "Departure"
+      )
+    );
   } catch (error) {}
 });
 export default AirplaneController;
