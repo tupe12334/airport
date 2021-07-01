@@ -6,7 +6,4 @@ COPY . .
 RUN npm run build
 COPY .env ./dist/
 
-ENV PORT=5001
-EXPOSE 5001
-
 CMD npm run start

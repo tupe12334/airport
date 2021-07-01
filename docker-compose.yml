@@ -6,6 +6,46 @@ services:
       - ./config/nginx.conf:/etc/nginx/nginx.conf:ro
     ports:
       - "8080:80"
+  communication:
+    container_name: communication
+    restart: always
+    # ports:
+    #   - 5001:5001
+    build: ./packages/communication
+    networks:
+      - airport-net
+    env_file:
+      - ".base.env"
+  tower:
+    container_name: tower
+    restart: always
+    build: ./packages/control-tower
+    networks:
+      - airport-net
+    env_file:
+      - ".base.env"
+    depends_on:
+      - communication
+  client:
+    container_name: client
+    restart: always
+    build: ./packages/client
+    networks:
+      - airport-net
+    env_file:
+      - ".base.env"
+    depends_on:
+      - communication
+  generator:
+    container_name: generator
+    restart: always
+    build: ./packages/generator
+    networks:
+      - airport-net
+    env_file:
+      - ".base.env"
+    depends_on:
+      - tower
   db:
     image: postgres
     restart: always
@@ -25,3 +65,6 @@ services:
       - db
 volumes:
   postgres: ~
+networks:
+  airport-net:
+    driver: bridge

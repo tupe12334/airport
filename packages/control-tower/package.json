@@ -7,7 +7,10 @@
   "author": "",
   "license": "ISC",
   "scripts": {
-    "start:debug": "nodemon ./src/index.ts"
+    "start": "node ./dist/index.js",
+    "start:debug": "nodemon ./src/index.ts",
+    "postinstall": "prisma db pull && prisma generate",
+    "build": "tsc"
   },
   "dependencies": {
     "@prisma/client": "^2.26.0",
@@ -16,13 +19,13 @@
     "dotenv-expand": "^5.1.0",
     "express": "^4.17.1",
     "socket.io": "^4.1.2",
+    "prisma": "^2.26.0",
     "socket.io-client": "^4.1.2"
   },
   "devDependencies": {
     "@types/express": "^4.17.12",
     "@types/node": "^15.12.5",
     "@types/socket.io-client": "^3.0.0",
-    "nodemon": "^2.0.7",
-    "prisma": "^2.26.0"
+    "nodemon": "^2.0.7"
   }
 }
