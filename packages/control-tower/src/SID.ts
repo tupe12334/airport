@@ -12,9 +12,11 @@ class SID extends BaseProcedure {
     this._socket.on(
       "message",
       async ({ content, from, to, sent_at }: Message) => {
-        if (content.toLowerCase().includes("in departure")) {
+        if (content.toLowerCase().includes("in rotem")) {
           await sleep(1000);
-          await AirplanePool[from].removeSelf();
+          try {
+            await AirplanePool[from].removeSelf();
+          } catch (error) {}
         }
       }
     );
