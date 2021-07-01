@@ -5,7 +5,7 @@ COPY . .
 RUN npm ci
 RUN npm run build
 COPY .env ./dist/
-
+RUN node ./dist/seed.js
 ENV PORT=5000
 EXPOSE 5000
 
