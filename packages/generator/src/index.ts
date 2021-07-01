@@ -2,7 +2,7 @@ import GeneratorService from "./Generator.service";
 require("dotenv-expand")(require("dotenv").config());
 (async () => {
   setInterval(async () => {
-    const randomTarget = 0.8;
+    const randomTarget = 0.5;
     const W1open = await GeneratorService.checkifW1IsOpen();
     W1open &&
       Math.random() > randomTarget &&
