@@ -14,9 +14,9 @@ services:
   #   #   - airport-net
   #   env_file:
   #     - ".base.env"
-  #   depends_on: 
+  #   depends_on:
   #     - postgres
-  #   links: 
+  #   links:
   #     - postgres
   # tower:
   #   container_name: tower
@@ -49,21 +49,21 @@ services:
   #     - ".base.env"
   #   depends_on:
   #     - tower
-  # postgres:
-  #   container_name: postgres
-  #   image: postgres
-  #   restart: always
-  #   environment:
-  #     POSTGRES_USER: ofek
-  #     POSTGRES_PASSWORD: ofekgabay
-  #     POSTGRES_DB: air_port
-  #   volumes:
-  #     - postgres:/var/lib/postgresql/data
-  #     - ./config/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
-  #   ports:
-  #     - 5432:5432
-  #   # networks:
-  #   #   - airport-net
+  postgres:
+    container_name: postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ofek
+      POSTGRES_PASSWORD: ofekgabay
+      POSTGRES_DB: air_port
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./config/postgresql.conf:/var/lib/postgresql/data/postgresql.conf
+    ports:
+      - 5432:5432
+    # networks:
+    #   - airport-net
   adminer:
     container_name: adminer
     image: adminer
@@ -79,7 +79,7 @@ services:
     restart: always
     ports:
       - 5050:5050
-    depends_on: 
+    depends_on:
       - postgres
     # networks:
     #   - airport-net
