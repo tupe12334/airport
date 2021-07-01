@@ -49,8 +49,8 @@ services:
   #     - ".base.env"
   #   depends_on:
   #     - tower
-  postgres:
-    container_name: postgres
+  db:
+    container_name: db
     image: postgres
     restart: always
     environment:
@@ -71,7 +71,7 @@ services:
     ports:
       - 8081:8080
     depends_on:
-      - postgres
+      - db
     # networks:
     #   - airport-net
   pgadmin:
@@ -80,7 +80,7 @@ services:
     ports:
       - 5050:5050
     depends_on:
-      - postgres
+      - db
     # networks:
     #   - airport-net
 volumes:
